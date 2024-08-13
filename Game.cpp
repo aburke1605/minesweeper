@@ -16,10 +16,10 @@ class Game {
 				for (unsigned int j = 0; j < _size.y; j++) {
 					row_i.push_back(sf::Vector2f((float)(i * window.getSize().x / _size.x), (float)(j * window.getSize().y / _size.y)));
 				}
-				_coordinates.push_back(row_i);
+				_squares.push_back(row_i);
 			}
 
-			DrawCoordinates(window);
+			//DrawSquares(window);
 
 			srand(time(NULL));
 			for (unsigned int i = 0; i < _n_mines; i++) {
@@ -32,10 +32,10 @@ class Game {
 			}
 		}
 
-		void DrawCoordinates(sf::RenderWindow& window) {
+		void DrawSquares(sf::RenderWindow& window) {
 			sf::RectangleShape rect(sf::Vector2f((float)window.getSize().x / _size.x * _cell_size, (float)window.getSize().y / _size.y * _cell_size));
 
-			for (auto& row : _coordinates) {
+			for (auto& row : _squares) {
 				for (auto& row_col : row) {
 					rect.setPosition(row_col + sf::Vector2f(_size.x * (1.0f - _cell_size) / 2, _size.y * (1.0f - _cell_size) / 2));
 					window.draw(rect);
@@ -53,7 +53,7 @@ class Game {
 		sf::Vector2u _size;
 		float _cell_size;
 		unsigned int _n_mines;
-		std::vector<std::vector<sf::Vector2f>> _coordinates;
+		std::vector<std::vector<sf::Vector2f>> _squares;
 		std::vector<sf::RectangleShape> _mines;
 		sf::RectangleShape _mine;
 };
