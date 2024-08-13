@@ -25,10 +25,10 @@ class Game {
 			for (unsigned int i = 0; i < _n_mines; i++) {
 				unsigned int x = rand() % _size.x;
 				unsigned int y = rand() % _size.y;
-				_mine = sf::RectangleShape(sf::Vector2f((float)window.getSize().x / _size.x * _cell_size, (float)window.getSize().y / _size.y * _cell_size));
-				_mine.setPosition(sf::Vector2f((float)(x * window.getSize().x / _size.x), (float)(y * window.getSize().y / _size.y)) + sf::Vector2f(_size.x * (1.0f - _cell_size) / 2, _size.y * (1.0f - _cell_size) / 2));
-				_mine.setFillColor(sf::Color(0, 0, 0));
-				_mines.push_back(_mine);
+				sf::RectangleShape mine(sf::Vector2f((float)window.getSize().x / _size.x * _cell_size, (float)window.getSize().y / _size.y * _cell_size));
+				mine.setPosition(sf::Vector2f((float)(x * window.getSize().x / _size.x), (float)(y * window.getSize().y / _size.y)) + sf::Vector2f(_size.x * (1.0f - _cell_size) / 2, _size.y * (1.0f - _cell_size) / 2));
+				mine.setFillColor(sf::Color(0, 0, 0));
+				_mines.push_back(mine);
 			}
 		}
 
@@ -55,5 +55,4 @@ class Game {
 		unsigned int _n_mines;
 		std::vector<std::vector<sf::Vector2f>> _squares;
 		std::vector<sf::RectangleShape> _mines;
-		sf::RectangleShape _mine;
 };
