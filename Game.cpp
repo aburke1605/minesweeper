@@ -8,20 +8,24 @@ class Game {
 	public:
 		Game(sf::RenderWindow& window) {
 			_size = sf::Vector2u(30, 20);
-			_cell_size = 0.9;
+			_cell_size = 0.9f;
 			_n_mines = 100;
 
 			for (unsigned int i = 0; i < _size.x; i++) {
-				std::vector<sf::Vector2f> row_i;
+				std::vector <std::pair<sf::Vector2f, sf::Vector2f>> col_i_boundaries;
+				std::vector<sf::Vector2f> col_i;
 				for (unsigned int j = 0; j < _size.y; j++) {
-					row_i.push_back(sf::Vector2f((float)(i * window.getSize().x / _size.x), (float)(j * window.getSize().y / _size.y)));
+					sf::Vector2f low_boundary((float)(i * window.getSize().x / _size.x), (float)(j * window.getSize().y / _size.y));
+					sf::Vector2f high_boundary((float)((i + 1) * window.getSize().x / _size.x), (float)((j + 1) * window.getSize().y / _size.y));
+					col_i_boundaries.push_back(std::make_pair(low_boundary, high_boundary));
+					//col_i.push_back(sf::Vector2f((float)(i * window.getSize().x / _size.x), (float)(j * window.getSize().y / _size.y)));
+					col_i.push_back(low_boundary);
 				}
-				_squares.push_back(row_i);
+				_coordinate_boundaries.push_back(col_i_boundaries);
+				_squares.push_back(col_i);
 			}
 
-			//DrawSquares(window);
-
-			srand(time(NULL));
+			srand((unsigned int)time(NULL));
 			for (unsigned int i = 0; i < _n_mines; i++) {
 				unsigned int x = rand() % _size.x;
 				unsigned int y = rand() % _size.y;
@@ -32,12 +36,17 @@ class Game {
 			}
 		}
 
+		std::vector<std::vector<std::pair<sf::Vector2f, sf::Vector2f>>> GetBoundaries() const {
+			return _coordinate_boundaries;
+		}
+
 		void DrawSquares(sf::RenderWindow& window) {
+			// TODO copy DrawMines
 			sf::RectangleShape rect(sf::Vector2f((float)window.getSize().x / _size.x * _cell_size, (float)window.getSize().y / _size.y * _cell_size));
 
-			for (auto& row : _squares) {
-				for (auto& row_col : row) {
-					rect.setPosition(row_col + sf::Vector2f(_size.x * (1.0f - _cell_size) / 2, _size.y * (1.0f - _cell_size) / 2));
+			for (auto& col : _squares) {
+				for (auto& col_row : col) {
+					rect.setPosition(col_row + sf::Vector2f(_size.x * (1.0f - _cell_size) / 2, _size.y * (1.0f - _cell_size) / 2));
 					window.draw(rect);
 				}
 			}
@@ -54,5 +63,6 @@ class Game {
 		float _cell_size;
 		unsigned int _n_mines;
 		std::vector<std::vector<sf::Vector2f>> _squares;
+		std::vector<std::vector<std::pair<sf::Vector2f, sf::Vector2f>>> _coordinate_boundaries;
 		std::vector<sf::RectangleShape> _mines;
 };

@@ -26,6 +26,21 @@ int main() {
 
 			if (event.type == sf::Event::MouseButtonPressed) {
 				if (event.key.code == sf::Mouse::Left) {
+
+					std::cout << sf::Mouse::getPosition(window).x << "," << sf::Mouse::getPosition(window).y << std::endl;
+					auto coordinates = game.GetBoundaries();
+					size_t col, row;
+					for (size_t i = 0; i < coordinates.size(); i++) {
+						for (size_t j = 0; j < coordinates[i].size(); j++) {
+							if (sf::Mouse::getPosition(window).x > coordinates[i][j].first.x && sf::Mouse::getPosition(window).x < coordinates[i][j].second.x &&
+								sf::Mouse::getPosition(window).y 
+							
+							> coordinates[i][j].first.y && sf::Mouse::getPosition(window).y < coordinates[i][j].second.y) {
+								std::cout << "(" << coordinates[i][j].first.x << "," << coordinates[i][j].second.x << "),  " << "(" << coordinates[i][j].first.y << "," << coordinates[i][j].second.y << ")\n";
+							}
+						}
+					}
+
 					window.clear(sf::Color::Black); // reset previous frame
 					game.DrawSquares(window);
 					game.DrawMines(window);
