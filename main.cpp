@@ -8,7 +8,7 @@ int main() {
 	unsigned int y_dimension = 400;
 	sf::RenderWindow window(sf::VideoMode(x_dimension, y_dimension), "window");
 
-	Game game(window);
+	/*Game game(window);
 
 	// display initial squares
 	game.DrawSquares(window);
@@ -29,15 +29,19 @@ int main() {
 
 					std::cout << sf::Mouse::getPosition(window).x << "," << sf::Mouse::getPosition(window).y << std::endl;
 					auto coordinates = game.GetBoundaries();
+					auto squares = game.GetSquares();
 					size_t col, row;
 					for (size_t i = 0; i < coordinates.size(); i++) {
 						for (size_t j = 0; j < coordinates[i].size(); j++) {
-							if (sf::Mouse::getPosition(window).x > coordinates[i][j].first.x && sf::Mouse::getPosition(window).x < coordinates[i][j].second.x &&
-								sf::Mouse::getPosition(window).y 
-							
-							> coordinates[i][j].first.y && sf::Mouse::getPosition(window).y < coordinates[i][j].second.y) {
+							if (sf::Mouse::getPosition(window).x > coordinates[i][j].first.x &&
+								sf::Mouse::getPosition(window).x < coordinates[i][j].second.x &&
+								sf::Mouse::getPosition(window).y > coordinates[i][j].first.y &&
+								sf::Mouse::getPosition(window).y < coordinates[i][j].second.y)
+							{
 								std::cout << "(" << coordinates[i][j].first.x << "," << coordinates[i][j].second.x << "),  " << "(" << coordinates[i][j].first.y << "," << coordinates[i][j].second.y << ")\n";
+								std::cout << RemoveSquare(squares, coordinates[i][j].first) << std::endl;
 							}
+
 						}
 					}
 
@@ -48,7 +52,7 @@ int main() {
 				}
 			}
 		}
-	}
+	}*/
 
 	return 0;
 }
