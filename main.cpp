@@ -39,7 +39,6 @@ int main() {
 							sf::Mouse::getPosition(window).x < edges.second.x &&
 							sf::Mouse::getPosition(window).y > edges.first.y &&
 							sf::Mouse::getPosition(window).y < edges.second.y) {
-								std::cout << "(" << edges.first.x << "," << edges.second.x << "),  " << "(" << edges.first.y << "," << edges.second.y << ")\n";
 								point = nullptr;
 							}
 
