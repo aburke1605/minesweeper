@@ -12,12 +12,7 @@ int main() {
 	Grid grid(window);
 
 	// display initial squares
-	for (auto& row : grid.GetPoints()) {
-		for (auto& point : row) {
-			if (point != nullptr)
-				point->Draw(window);
-		}
-	}
+	grid.Draw(window);
 	window.display();
 
 	while (window.isOpen()) {
@@ -52,12 +47,7 @@ int main() {
 					}
 
 					window.clear(sf::Color::Black); // reset previous frame
-					for (auto& row : grid.GetPoints()) {
-						for (auto& point : row) {
-							if (point != nullptr)
-								point->Draw(window);
-						}
-					}
+					grid.Draw(window);
 					window.display();
 				}
 			}

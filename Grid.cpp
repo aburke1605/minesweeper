@@ -26,6 +26,15 @@ public:
 		return _points;
 	}
 
+	void Draw(sf::RenderWindow& window) {
+		for (auto& row : _points) {
+			for (auto& point : row) {
+				if (point != nullptr)
+					point->Draw(window);
+			}
+		}
+	}
+
 private:
 	std::vector<std::vector<Point*>> _points;
 };
