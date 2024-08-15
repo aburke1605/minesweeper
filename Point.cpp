@@ -25,10 +25,10 @@ class Point {
 class Square : public Point {
 	public:
 		Square(sf::Vector2f position, float size) : Point(position, size) {
-			_rect = sf::RectangleShape(sf::Vector2f(19.0f, 19.0f));
+			_rect = sf::RectangleShape(sf::Vector2f(18.0f, 18.0f));
 			_rect.setPosition(GetPosition());
 
-			_flag = sf::CircleShape(15, 4);
+			_flag = sf::CircleShape(9, 4);
 			_flag.setPosition(GetPosition());
 			_flag.setFillColor(sf::Color(150, 50, 250));
 			_flagged = false;
