@@ -27,7 +27,7 @@ int main() {
 
 			if (event.type == sf::Event::MouseButtonPressed) {
 				sf::Vector2i mouse(sf::Mouse::getPosition(window));
-				for (auto& row : grid.GetPoints()) {
+				for (auto& row : grid.GetSquares()) {
 					for (auto& point : row) {
 						if (point == nullptr) // do nothing on already cleared positions anyway
 							continue;

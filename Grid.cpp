@@ -1,4 +1,4 @@
-#include "Point.cpp"
+#include "Square.cpp"
 #include <random>
 
 class Grid {
@@ -23,7 +23,7 @@ class Grid {
 			}
 		}
 
-		std::vector<std::vector<Square*>>& GetPoints() {
+		std::vector<std::vector<Square*>>& GetSquares() {
 			return _rows_cols;
 		}
 
