@@ -13,16 +13,16 @@ public:
 				sf::Vector2f position(float(i) * window.getSize().x / size.x, float(j) * window.getSize().y / size.y);
 				row.push_back(new Square(position, width));
 			}
-			_points.push_back(row);
+			_rows_cols.push_back(row);
 		}
 	}
 
 	std::vector<std::vector<Point*>>& GetPoints() {
-		return _points;
+		return _rows_cols;
 	}
 
 	void Draw(sf::RenderWindow& window) {
-		for (auto& row : _points) {
+		for (auto& row : _rows_cols) {
 			for (auto& point : row) {
 				if (point != nullptr)
 					point->Draw(window);
@@ -31,5 +31,5 @@ public:
 	}
 
 private:
-	std::vector<std::vector<Point*>> _points;
+	std::vector<std::vector<Point*>> _rows_cols;
 };
