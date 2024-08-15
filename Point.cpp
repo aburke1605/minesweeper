@@ -22,14 +22,15 @@ private:
 class Square : public Point {
 public:
 	Square(sf::Vector2f position, float size) : Point(position, size) {
+		_rect = sf::RectangleShape(sf::Vector2f(19.0f, 19.0f));
+		_rect.setPosition(GetPosition());
 		_n_mines_in_proximity = 0;
 	}
 	void Draw(sf::RenderWindow& window) const {
-		sf::RectangleShape rect(sf::Vector2f(19.0f, 19.0f));
-		rect.setPosition(GetPosition());
-		window.draw(rect);
+		window.draw(_rect);
 	}
 private:
+	sf::RectangleShape _rect;
 	unsigned int _n_mines_in_proximity;
 };
 
