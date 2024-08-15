@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include "Game.cpp"
+#include "Grid.cpp"
 #include <windows.h>
+#include <iostream>
 
 int main() {
 
@@ -8,10 +9,15 @@ int main() {
 	unsigned int y_dimension = 400;
 	sf::RenderWindow window(sf::VideoMode(x_dimension, y_dimension), "window");
 
-	/*Game game(window);
+	Grid grid(window);
 
 	// display initial squares
-	game.DrawSquares(window);
+	for (auto& row : grid.GetPoints()) {
+		for (auto& point : row) {
+			if (point != nullptr)
+				point->Draw(window);
+		}
+	}
 	window.display();
 
 	while (window.isOpen()) {
@@ -28,31 +34,35 @@ int main() {
 				if (event.key.code == sf::Mouse::Left) {
 
 					std::cout << sf::Mouse::getPosition(window).x << "," << sf::Mouse::getPosition(window).y << std::endl;
-					auto coordinates = game.GetBoundaries();
-					auto squares = game.GetSquares();
-					size_t col, row;
-					for (size_t i = 0; i < coordinates.size(); i++) {
-						for (size_t j = 0; j < coordinates[i].size(); j++) {
-							if (sf::Mouse::getPosition(window).x > coordinates[i][j].first.x &&
-								sf::Mouse::getPosition(window).x < coordinates[i][j].second.x &&
-								sf::Mouse::getPosition(window).y > coordinates[i][j].first.y &&
-								sf::Mouse::getPosition(window).y < coordinates[i][j].second.y)
-							{
-								std::cout << "(" << coordinates[i][j].first.x << "," << coordinates[i][j].second.x << "),  " << "(" << coordinates[i][j].first.y << "," << coordinates[i][j].second.y << ")\n";
-								std::cout << RemoveSquare(squares, coordinates[i][j].first) << std::endl;
+					for (auto& row : grid.GetPoints()) {
+						for (auto& point : row) {
+							if (point == nullptr)
+								continue;
+							std::pair<sf::Vector2f, sf::Vector2f> edges = point->GetEdges();
+							if (
+							sf::Mouse::getPosition(window).x > edges.first.x &&
+							sf::Mouse::getPosition(window).x < edges.second.x &&
+							sf::Mouse::getPosition(window).y > edges.first.y &&
+							sf::Mouse::getPosition(window).y < edges.second.y) {
+								std::cout << "(" << edges.first.x << "," << edges.second.x << "),  " << "(" << edges.first.y << "," << edges.second.y << ")\n";
+								point = nullptr;
 							}
 
 						}
 					}
 
 					window.clear(sf::Color::Black); // reset previous frame
-					game.DrawSquares(window);
-					game.DrawMines(window);
+					for (auto& row : grid.GetPoints()) {
+						for (auto& point : row) {
+							if (point != nullptr)
+								point->Draw(window);
+						}
+					}
 					window.display();
 				}
 			}
 		}
-	}*/
+	}
 
 	return 0;
 }
