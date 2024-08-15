@@ -28,11 +28,11 @@ int main() {
 			if (event.type == sf::Event::MouseButtonPressed) {
 				sf::Vector2i mouse(sf::Mouse::getPosition(window));
 				for (auto& row : grid.GetSquares()) {
-					for (auto& point : row) {
-						if (point == nullptr) // do nothing on already cleared positions anyway
+					for (auto& square : row) {
+						if (square == nullptr) // do nothing on already cleared positions anyway
 							continue;
 
-						std::pair<sf::Vector2f, sf::Vector2f> edges = point->GetEdges();
+						std::pair<sf::Vector2f, sf::Vector2f> edges = square->GetEdges();
 
 						if (mouse.x > edges.first.x && mouse.x < edges.second.x &&
 							mouse.y > edges.first.y && mouse.y < edges.second.y) {
@@ -44,7 +44,7 @@ int main() {
 
 							// right click
 							else if (event.key.code == sf::Mouse::Right) {
-								point->FlipFlag();
+								square->FlipFlag();
 							}
 						}
 					}
