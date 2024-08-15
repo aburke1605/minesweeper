@@ -1,30 +1,16 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-class Point {
+
+
+#include <iostream>
+
+class Square {
 	public:
-		Point(sf::Vector2f position, float size) {
+		Square(sf::Vector2f position, float size) {
 			_position = position;
 			_edges = std::make_pair(position, position + sf::Vector2f(size, size));
-		}
-		sf::Vector2f GetPosition() const {
-			return _position;
-		}
-		std::pair< sf::Vector2f, sf::Vector2f> GetEdges() const {
-			return _edges;
-		}
-		virtual void FlipFlag() {}
-		virtual void Draw(sf::RenderWindow& window) const {}
-	private:
-		sf::Vector2f _position;
-		std::pair<sf::Vector2f, sf::Vector2f> _edges;
-};
 
-
-
-class Square : public Point {
-	public:
-		Square(sf::Vector2f position, float size) : Point(position, size) {
 			_rect = sf::RectangleShape(sf::Vector2f(18.0f, 18.0f));
 			_rect.setPosition(GetPosition());
 
@@ -40,13 +26,24 @@ class Square : public Point {
 			_flagged = !_flagged;
 		}
 
-		void Draw(sf::RenderWindow& window) const {
+		virtual void Draw(sf::RenderWindow& window) const {
 			window.draw(_rect);
 			if (_flagged)
 				window.draw(_flag);
 		}
 
+
+		sf::Vector2f GetPosition() const {
+			return _position;
+		}
+		std::pair< sf::Vector2f, sf::Vector2f> GetEdges() const {
+			return _edges;
+		}
+
 	private:
+		sf::Vector2f _position;
+		std::pair<sf::Vector2f, sf::Vector2f> _edges;
+
 		sf::RectangleShape _rect;
 		sf::CircleShape _flag;
 		bool _flagged;
@@ -55,10 +52,18 @@ class Square : public Point {
 
 
 
-class Mine : public Point {
+class Mine : public Square {
 	public:
-		Mine(sf::Vector2f position, float size) : Point(position, size) {}
-		void Draw() const {
-
+		Mine(sf::Vector2f position, float size) : Square(position, size) {
+			_mine = sf::CircleShape(5, 8);
+			_mine.setPosition(GetPosition());
+			_mine.setFillColor(sf::Color(100, 100, 100));
 		}
+		void Draw(sf::RenderWindow& window) const {
+			Square::Draw(window);
+			window.draw(_mine); // reverse these later
+		}
+
+	private:
+		sf::CircleShape _mine;
 };
