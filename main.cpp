@@ -26,22 +26,26 @@ int main() {
 				window.close();
 
 			if (event.type == sf::Event::MouseButtonPressed) {
-				if (event.key.code == sf::Mouse::Left) {
+				sf::Vector2i mouse(sf::Mouse::getPosition(window));
+				for (auto& row : grid.GetPoints()) {
+					for (auto& point : row) {
+						if (point == nullptr) // do nothing on already cleared positions anyway
+							continue;
 
-					std::cout << sf::Mouse::getPosition(window).x << "," << sf::Mouse::getPosition(window).y << std::endl;
-					for (auto& row : grid.GetPoints()) {
-						for (auto& point : row) {
-							if (point == nullptr)
-								continue;
-							std::pair<sf::Vector2f, sf::Vector2f> edges = point->GetEdges();
-							if (
-							sf::Mouse::getPosition(window).x > edges.first.x &&
-							sf::Mouse::getPosition(window).x < edges.second.x &&
-							sf::Mouse::getPosition(window).y > edges.first.y &&
-							sf::Mouse::getPosition(window).y < edges.second.y) {
-								point = nullptr;
+						std::pair<sf::Vector2f, sf::Vector2f> edges = point->GetEdges();
+
+						if (mouse.x > edges.first.x && mouse.x < edges.second.x &&
+							mouse.y > edges.first.y && mouse.y < edges.second.y) {
+
+							// left click
+							if (event.key.code == sf::Mouse::Left) {
+									point = nullptr;
 							}
 
+							// right click
+							else if (event.key.code == sf::Mouse::Right) {
+								point->FlipFlag();
+							}
 						}
 					}
 
