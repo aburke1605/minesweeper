@@ -11,12 +11,7 @@ public:
 			std::vector<Point*> row;
 			for (int j = 0; j < (int)size.y; j++) {
 				sf::Vector2f position(float(i) * window.getSize().x / size.x, float(j) * window.getSize().y / size.y);
-				if (i == 4 && j == 8) {
-					row.push_back(nullptr);
-				}
-				else {
-					row.push_back(new Square(position, width));
-				}
+				row.push_back(new Square(position, width));
 			}
 			_points.push_back(row);
 		}
