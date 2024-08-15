@@ -57,10 +57,15 @@ class Mine : public Square {
 		Mine(sf::Vector2f position, float size) : Square(position, size) {
 			_detonated = false;
 
-			_mine = sf::CircleShape(5, 8);
+			_mine = sf::CircleShape(7, 8); // make this (9, 8)
 			_mine.setPosition(GetPosition());
 			_mine.setFillColor(sf::Color(100, 100, 100));
 		}
+
+		void Detonate() {
+			_detonated = true;
+		}
+
 		void Draw(sf::RenderWindow& window) const {
 			if (!_detonated)
 				Square::Draw(window);

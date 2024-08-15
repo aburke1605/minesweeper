@@ -15,7 +15,8 @@ int main() {
 	grid.Draw(window);
 	window.display();
 
-	while (window.isOpen()) {
+	bool game_over = false;
+	while (window.isOpen() && !game_over) {
 
 
 		// check for keyboard interaction
@@ -39,7 +40,13 @@ int main() {
 
 							// left click
 							if (event.key.code == sf::Mouse::Left) {
-									point = nullptr;
+								if (Mine* mine = dynamic_cast<Mine*>(square)) {
+									mine->Detonate();
+									game_over = true;
+								}
+								else {
+									square = nullptr;
+								}
 							}
 
 							// right click
@@ -57,5 +64,6 @@ int main() {
 		}
 	}
 
+	Sleep(5000); // ms
 	return 0;
 }
