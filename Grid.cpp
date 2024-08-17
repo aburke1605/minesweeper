@@ -21,6 +21,27 @@ class Grid {
 				}
 				_rows_cols.push_back(row);
 			}
+
+			// set number of mines in proximity for each square
+			for (int i = 0; i < (int)_rows_cols.size(); i++) {
+				for (int j = 0; j < (int)_rows_cols[i].size(); j++) {
+
+					// for this square, look in the surrounding 8 squares
+					unsigned int n_mines_in_proximity = 0;
+
+					for (int m = i - 1; m <= i + 1; m++) {
+						if (m < 0 || m >= (int)_rows_cols.size()) continue; // out of bounds
+						for (int n = j - 1; n <= j + 1; n++) {
+							if (n < 0 || n >= (int)_rows_cols[i].size()) continue; // out of bounds
+							if (!(m - i) && !(n - j)) continue; // this square
+							
+							if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[m][n]))
+								n_mines_in_proximity++;
+						}
+					}
+					_rows_cols[i][j]->SetNMinesInProximity(n_mines_in_proximity);
+				}
+			}
 		}
 
 		std::vector<std::vector<Square*>>& GetSquares() {

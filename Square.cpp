@@ -32,6 +32,10 @@ class Square {
 				window.draw(_flag);
 		}
 
+		void SetNMinesInProximity(unsigned int n_mines_in_proximity) {
+			_n_mines_in_proximity = n_mines_in_proximity;
+			_text.setString(std::to_string(_n_mines_in_proximity));
+		}
 
 		sf::Vector2f GetPosition() const {
 			return _position;
