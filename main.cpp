@@ -51,7 +51,7 @@ int main() {
 							mouse.y > edges.first.y && mouse.y < edges.second.y) {
 
 							// left click
-							if (event.key.code == sf::Mouse::Left) {
+							if (event.mouseButton.button == sf::Mouse::Left) {
 								if (Mine* mine = dynamic_cast<Mine*>(square)) {
 									mine->Detonate();
 									game_over = true;
@@ -62,7 +62,7 @@ int main() {
 							}
 
 							// right click
-							else if (event.key.code == sf::Mouse::Right) {
+							else if (event.mouseButton.button == sf::Mouse::Right) {
 								square->FlipFlag();
 							}
 						}
