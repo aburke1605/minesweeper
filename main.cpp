@@ -13,7 +13,14 @@ void s() {
 #else
 #error "Unknown operating system"
 #endif
-#include <iostream>
+
+/* TODO:
+* way to determine if all unmined squares have been uncovered
+* remove the sleep() call in place of a retry option
+* reveal all bombs when win or lose
+* read font only once
+*/
+
 
 int main() {
 

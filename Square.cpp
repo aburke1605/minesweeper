@@ -1,10 +1,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-
-
-#include <iostream>
-
 class Square {
 	public:
 		Square(sf::Vector2f position, float size) {
@@ -91,7 +87,7 @@ class Mine : public Square {
 		Mine(sf::Vector2f position, float size) : Square(position, size) {
 			_detonated = false;
 
-			_mine = sf::CircleShape(9, 8); // make this (9, 8)
+			_mine = sf::CircleShape(9, 8);
 			_mine.setPosition(GetPosition());
 			_mine.setFillColor(sf::Color(100, 100, 100));
 		}
@@ -101,7 +97,7 @@ class Mine : public Square {
 		}
 
 		void Draw(sf::RenderWindow& window) const {
-			window.draw(_mine); // reverse these later^
+			window.draw(_mine);
 			if (!_detonated)
 				Square::Draw(window);
 		}
