@@ -48,6 +48,52 @@ class Grid {
 			return _rows_cols;
 		}
 
+		bool Update(sf::RenderWindow& window, sf::Event& event) {
+			if (event.type == sf::Event::MouseButtonPressed) {
+				sf::Vector2i mouse(sf::Mouse::getPosition(window));
+				for (auto& row : _rows_cols) {
+					for (auto& square : row) {
+						if (square == nullptr) // do nothing on already cleared positions anyway
+							continue;
+
+						std::pair<sf::Vector2f, sf::Vector2f> edges = square->GetEdges();
+
+						if (mouse.x > edges.first.x && mouse.x < edges.second.x &&
+							mouse.y > edges.first.y && mouse.y < edges.second.y) {
+
+							// left click
+							if (event.mouseButton.button == sf::Mouse::Left) {
+								if (Mine* mine = dynamic_cast<Mine*>(square)) {
+									mine->Detonate();
+									return true;
+								}
+								else {
+									// if the square has zero mines in proximity,
+									// then loop over all adjacent squares also flipping them if they have zero and do so recursively
+									// stop when the square  has >0 mines in proximity
+
+									if (square->GetNMinesInProximity() == 0) {
+										std::cout << "zero" << std::endl;
+									}
+									square->FlipCovered();
+								}
+							}
+
+							// right click
+							else if (event.mouseButton.button == sf::Mouse::Right) {
+								square->FlipFlag();
+							}
+						}
+					}
+
+					window.clear(sf::Color::Black); // reset previous frame
+					Draw(window);
+					window.display();
+				}
+			}
+			return false;
+		}
+
 		void Draw(sf::RenderWindow& window) {
 			for (auto& row : _rows_cols) {
 				for (auto& square : row) {

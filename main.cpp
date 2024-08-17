@@ -38,41 +38,7 @@ int main() {
 			if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
 				window.close();
 
-			if (event.type == sf::Event::MouseButtonPressed) {
-				sf::Vector2i mouse(sf::Mouse::getPosition(window));
-				for (auto& row : grid.GetSquares()) {
-					for (auto& square : row) {
-						if (square == nullptr) // do nothing on already cleared positions anyway
-							continue;
-
-						std::pair<sf::Vector2f, sf::Vector2f> edges = square->GetEdges();
-
-						if (mouse.x > edges.first.x && mouse.x < edges.second.x &&
-							mouse.y > edges.first.y && mouse.y < edges.second.y) {
-
-							// left click
-							if (event.mouseButton.button == sf::Mouse::Left) {
-								if (Mine* mine = dynamic_cast<Mine*>(square)) {
-									mine->Detonate();
-									game_over = true;
-								}
-								else {
-									square->FlipCovered();
-								}
-							}
-
-							// right click
-							else if (event.mouseButton.button == sf::Mouse::Right) {
-								square->FlipFlag();
-							}
-						}
-					}
-
-					window.clear(sf::Color::Black); // reset previous frame
-					grid.Draw(window);
-					window.display();
-				}
-			}
+			game_over = grid.Update(window, event);
 		}
 	}
 
