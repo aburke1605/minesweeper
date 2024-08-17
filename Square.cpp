@@ -20,6 +20,15 @@ class Square {
 			_flagged = false;
 
 			_n_mines_in_proximity = 0;
+
+
+			if (!_font.loadFromFile("arial.ttf")) {}
+			_text.setFont(_font);
+			_text.setPosition(_position + sf::Vector2f(4.0f, 0.0f));
+			_text.setString(std::to_string(_n_mines_in_proximity));
+			_text.setCharacterSize(15); // in pixels, not points!
+			_text.setFillColor(sf::Color::Red);
+			_text.setStyle(sf::Text::Bold);
 		}
 
 		void FlipFlag() {
@@ -27,9 +36,12 @@ class Square {
 		}
 
 		virtual void Draw(sf::RenderWindow& window) const {
-			window.draw(_rect);
-			if (_flagged)
-				window.draw(_flag);
+
+			if (_n_mines_in_proximity != 0) {// reverse these later^
+				window.draw(_text);
+			}
+			if (_covered) window.draw(_rect);
+			if (_flagged) window.draw(_flag);
 		}
 
 		void SetNMinesInProximity(unsigned int n_mines_in_proximity) {
@@ -52,6 +64,9 @@ class Square {
 		sf::CircleShape _flag;
 		bool _flagged;
 		unsigned int _n_mines_in_proximity;
+
+		sf::Font _font; // this should be shared between all instances
+		sf::Text _text;
 };
 
 
