@@ -57,7 +57,7 @@ int main() {
 									game_over = true;
 								}
 								else {
-									square = nullptr;
+									square->FlipCovered();
 								}
 							}
 

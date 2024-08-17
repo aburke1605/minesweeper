@@ -14,6 +14,8 @@ class Square {
 			_rect = sf::RectangleShape(sf::Vector2f(18.0f, 18.0f));
 			_rect.setPosition(GetPosition());
 
+			_covered = true;
+
 			_flag = sf::CircleShape(9, 4);
 			_flag.setPosition(GetPosition());
 			_flag.setFillColor(sf::Color(150, 50, 250));
@@ -29,6 +31,10 @@ class Square {
 			_text.setCharacterSize(15); // in pixels, not points!
 			_text.setFillColor(sf::Color::Red);
 			_text.setStyle(sf::Text::Bold);
+		}
+
+		void FlipCovered() {
+			_covered = !_covered;
 		}
 
 		void FlipFlag() {
@@ -62,6 +68,7 @@ class Square {
 
 		sf::RectangleShape _rect;
 		sf::CircleShape _flag;
+		bool _covered;
 		bool _flagged;
 		unsigned int _n_mines_in_proximity;
 
