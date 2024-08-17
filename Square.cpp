@@ -33,8 +33,8 @@ class Square {
 			_text.setStyle(sf::Text::Bold);
 		}
 
-		void FlipCovered() {
-			_covered = !_covered;
+		void Uncover() {
+			_covered = false;
 		}
 
 		void FlipFlag() {
@@ -60,6 +60,14 @@ class Square {
 		}
 		std::pair< sf::Vector2f, sf::Vector2f> GetEdges() const {
 			return _edges;
+		}
+
+		bool GetCovered() {
+			return _covered;
+		}
+
+		unsigned int GetNMinesInProximity() const {
+			return _n_mines_in_proximity;
 		}
 
 	private:

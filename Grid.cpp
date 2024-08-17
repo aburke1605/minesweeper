@@ -103,6 +103,28 @@ class Grid {
 			}
 		}
 
+		void Clear(unsigned int i, unsigned int j) {
+			_rows_cols[i][j]->Uncover();
+			// check surrounding squares
+			for (unsigned int m = i - 1; m <= i + 1; m++) {
+				if (m < 0 || m >= (unsigned int)_rows_cols.size()) continue; // out of bounds
+				for (unsigned int n = j - 1; n <= j + 1; n++) {
+					if (n < 0 || n >= (unsigned int)_rows_cols[i].size()) continue; // out of bounds
+					if (!(m - i) && !(n - j)) continue; // this square
+
+					// do nothing with mines
+					if (dynamic_cast<Mine*>(_rows_cols[m][n]) == nullptr) {
+						if (_rows_cols[m][n]->GetNMinesInProximity() == 0 && _rows_cols[m][n]->GetCovered())
+							// recursively call
+							Clear(m, n);
+						else
+							// simply uncover squares with >0 mines in proximity
+							_rows_cols[m][n]->Uncover();
+					}
+				}
+			}
+		}
+
 	private:
 		std::vector<std::vector<Square*>> _rows_cols;
 
