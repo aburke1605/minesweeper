@@ -1,6 +1,18 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.cpp"
+#ifdef _WIN32
 #include <windows.h>
+void s() {
+	Sleep(5000);
+}
+#elif __linux__
+#include <unistd.h>  // For POSIX functions on Linux
+void s() {
+	sleep(5);
+}
+#else
+#error "Unknown operating system"
+#endif
 #include <iostream>
 
 int main() {
@@ -64,6 +76,6 @@ int main() {
 		}
 	}
 
-	Sleep(5000); // ms
+	s(); // ms
 	return 0;
 }
