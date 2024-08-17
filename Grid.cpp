@@ -51,19 +51,19 @@ class Grid {
 		bool Update(sf::RenderWindow& window, sf::Event& event) {
 			if (event.type == sf::Event::MouseButtonPressed) {
 				sf::Vector2i mouse(sf::Mouse::getPosition(window));
-				for (auto& row : _rows_cols) {
-					for (auto& square : row) {
-						if (square == nullptr) // do nothing on already cleared positions anyway
+				for (unsigned int i = 0; i < (unsigned int)_rows_cols.size(); i++) {
+					for (unsigned int j = 0; j < (unsigned int)_rows_cols[i].size(); j++) {
+						if (_rows_cols[i][j] == nullptr) // do nothing on already cleared positions anyway
 							continue;
 
-						std::pair<sf::Vector2f, sf::Vector2f> edges = square->GetEdges();
+						std::pair<sf::Vector2f, sf::Vector2f> edges = _rows_cols[i][j]->GetEdges();
 
 						if (mouse.x > edges.first.x && mouse.x < edges.second.x &&
 							mouse.y > edges.first.y && mouse.y < edges.second.y) {
 
 							// left click
 							if (event.mouseButton.button == sf::Mouse::Left) {
-								if (Mine* mine = dynamic_cast<Mine*>(square)) {
+								if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[i][j])) {
 									mine->Detonate();
 									return true;
 								}
@@ -71,17 +71,16 @@ class Grid {
 									// if the square has zero mines in proximity,
 									// then loop over all adjacent squares also flipping them if they have zero and do so recursively
 									// stop when the square  has >0 mines in proximity
-
-									if (square->GetNMinesInProximity() == 0) {
-										std::cout << "zero" << std::endl;
+									if (_rows_cols[i][j]->GetNMinesInProximity() == 0) {
+										Clear(i, j);
 									}
-									square->FlipCovered();
+										_rows_cols[i][j]->Uncover();
 								}
 							}
 
 							// right click
 							else if (event.mouseButton.button == sf::Mouse::Right) {
-								square->FlipFlag();
+								_rows_cols[i][j]->FlipFlag();
 							}
 						}
 					}
