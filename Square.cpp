@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 
 class Square {
-public:
-	Square(sf::Vector2f position, float size, sf::Font* font) {
+	public:
+		Square(sf::Vector2f position, float size, sf::Font* font) {
 			_position = position;
 			_edges = std::make_pair(position, position + sf::Vector2f(size, size));
 
@@ -36,8 +36,7 @@ public:
 		}
 
 		virtual void Draw(sf::RenderWindow& window) const {
-
-			if (_n_mines_in_proximity != 0) {// reverse these later^
+			if (_n_mines_in_proximity != 0) {
 				window.draw(_text);
 			}
 			if (_covered) window.draw(_rect);
