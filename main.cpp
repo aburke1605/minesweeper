@@ -1,18 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.cpp"
-#ifdef _WIN32
-#include <windows.h>
-void s() {
-	Sleep(5000);
-}
-#elif __linux__
-#include <unistd.h>  // For POSIX functions on Linux
-void s() {
-	sleep(5);
-}
-#else
-#error "Unknown operating system"
-#endif
 
 /* TODO:
 * way to determine if all unmined squares have been uncovered
@@ -39,9 +26,9 @@ int main() {
 	grid.Draw(window);
 	window.display();
 
-	bool game_over = false;
-	while (window.isOpen() && !game_over) {
+	while (window.isOpen()) {
 
+		bool game_over = false;
 
 		// check for keyboard interaction
 		sf::Event event;
@@ -52,8 +39,37 @@ int main() {
 
 			game_over = grid.Update(window, event);
 		}
-	}
+		
+		if (game_over) {
+			sf::RectangleShape box(sf::Vector2f((float)x_dimension, (float)y_dimension));
+			box.setFillColor(sf::Color(0, 0, 0, 180));
+			window.draw(box);
+			sf::Text text;
+			text.setFont(*font);
+			text.setPosition(sf::Vector2f((float)x_dimension * 0.25f, (float)y_dimension * 0.4f));
+			text.setString("\
+    GAME OVER\n\
+play again? (Enter)\
+			");
+			text.setCharacterSize(32);
+			text.setFillColor(sf::Color::Blue);
+			text.setStyle(sf::Text::Bold);
+			window.draw(text);
+			window.display();
 
-	s(); // ms
-	return 0;
+			while (1) { // could probably be neater
+				while (window.pollEvent(event)) {
+					if (event.type == sf::Event::KeyPressed) {
+						if (event.key.code == sf::Keyboard::Enter) {
+							window.close();
+							return main();
+						}
+						else if (event.key.code == sf::Keyboard::Escape) {
+							return 0;
+						}
+					}
+				}
+			}
+		}
+	}
 }
