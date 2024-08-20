@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 
 class Square {
-	public:
-		Square(sf::Vector2f position, float size) {
+public:
+	Square(sf::Vector2f position, float size, sf::Font* font) {
 			_position = position;
 			_edges = std::make_pair(position, position + sf::Vector2f(size, size));
 
@@ -19,9 +19,7 @@ class Square {
 
 			_n_mines_in_proximity = 0;
 
-
-			if (!_font.loadFromFile("arial.ttf")) {}
-			_text.setFont(_font);
+			_text.setFont(*font);
 			_text.setPosition(_position + sf::Vector2f(4.0f, 0.0f));
 			_text.setString(std::to_string(_n_mines_in_proximity));
 			_text.setCharacterSize(15); // in pixels, not points!
@@ -76,7 +74,6 @@ class Square {
 		bool _flagged;
 		unsigned int _n_mines_in_proximity;
 
-		sf::Font _font; // this should be shared between all instances
 		sf::Text _text;
 };
 
@@ -84,7 +81,7 @@ class Square {
 
 class Mine : public Square {
 	public:
-		Mine(sf::Vector2f position, float size) : Square(position, size) {
+		Mine(sf::Vector2f position, float size, sf::Font* font) : Square(position, size, font) {
 			_detonated = false;
 
 			_mine = sf::CircleShape(9, 8);

@@ -28,7 +28,12 @@ int main() {
 	unsigned int y_dimension = 400;
 	sf::RenderWindow window(sf::VideoMode(x_dimension, y_dimension), "window");
 
-	Grid grid(window);
+	sf::Font* font = new sf::Font;
+	if (!font->loadFromFile("arial.ttf")) {
+		return EXIT_FAILURE;
+	}
+
+	Grid grid(window, font);
 
 	// display initial squares
 	grid.Draw(window);

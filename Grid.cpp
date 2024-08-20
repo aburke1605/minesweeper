@@ -3,7 +3,7 @@
 
 class Grid {
 	public:
-		Grid(sf::RenderWindow& window) {
+		Grid(sf::RenderWindow& window, sf::Font* font) {
 			sf::Vector2f size(30.0f, 20.0f);
 			float width = window.getSize().x / size.x;
 
@@ -15,9 +15,9 @@ class Grid {
 				for (int j = 0; j < (int)size.y; j++) {
 					sf::Vector2f position(float(i) * window.getSize().x / size.x, float(j) * window.getSize().y / size.y);
 					if (distribution(_generator) == 0) // 20% of the squares are mines
-						row.push_back(new Mine(position, width));
+						row.push_back(new Mine(position, width, font));
 					else
-						row.push_back(new Square(position, width));
+						row.push_back(new Square(position, width, font));
 				}
 				_rows_cols.push_back(row);
 			}
