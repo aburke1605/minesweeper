@@ -42,6 +42,18 @@ class Grid {
 					_rows_cols[i][j]->SetNMinesInProximity(n_mines_in_proximity);
 				}
 			}
+
+			// stuff to display when the game ends
+			_game_over = false;
+			_game_over_text.setFont(*font);
+			_game_over_text.setPosition(sf::Vector2f((float)window.getSize().x * 0.25f, (float)window.getSize().y * 0.4f));
+			_game_over_text.setString("\
+    GAME OVER\n\
+play again? (Enter)\
+			");
+			_game_over_text.setCharacterSize(32);
+			_game_over_text.setFillColor(sf::Color::Blue);
+			_game_over_text.setStyle(sf::Text::Bold);
 		}
 
 		std::vector<std::vector<Square*>>& GetSquares() {
@@ -64,8 +76,15 @@ class Grid {
 							// left click
 							if (event.mouseButton.button == sf::Mouse::Left) {
 								if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[i][j])) {
-									mine->Detonate();
-									return true;
+									// reveal all squares
+									for (auto& row : _rows_cols) {
+										for (auto& square : row) {
+											square->Uncover();
+										}
+									}
+									_game_over = true;
+
+									goto draw; // better than break in this case
 								}
 								else {
 									// if the square has zero mines in proximity,
@@ -84,13 +103,13 @@ class Grid {
 							}
 						}
 					}
-
-					window.clear(sf::Color::Black); // reset previous frame
-					Draw(window);
-					window.display();
 				}
 			}
-			return false;
+
+		draw:
+			Draw(window);
+
+			return _game_over;
 		}
 
 		void Draw(sf::RenderWindow& window) {
@@ -99,6 +118,13 @@ class Grid {
 					if (square != nullptr)
 						square->Draw(window);
 				}
+			}
+
+			if (_game_over) {
+				sf::RectangleShape box(sf::Vector2f((float)window.getSize().x, (float)window.getSize().y));
+				box.setFillColor(sf::Color(0, 0, 0, 180));
+				window.draw(box);
+				window.draw(_game_over_text);
 			}
 		}
 
@@ -129,4 +155,7 @@ class Grid {
 
 		std::random_device _rd; // a seed source for the random number engine
 		std::mt19937 _generator;
+
+		bool _game_over;
+		sf::Text _game_over_text;
 };

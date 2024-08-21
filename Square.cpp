@@ -81,24 +81,18 @@ class Square {
 class Mine : public Square {
 	public:
 		Mine(sf::Vector2f position, float size, sf::Font* font) : Square(position, size, font) {
-			_detonated = false;
+			//_detonated = false;
 
 			_mine = sf::CircleShape(9, 8);
 			_mine.setPosition(GetPosition());
 			_mine.setFillColor(sf::Color(100, 100, 100));
 		}
 
-		void Detonate() {
-			_detonated = true;
-		}
-
 		void Draw(sf::RenderWindow& window) const {
 			window.draw(_mine);
-			if (!_detonated)
-				Square::Draw(window);
+			Square::Draw(window);
 		}
 
 	private:
-		bool _detonated;
 		sf::CircleShape _mine;
 };
