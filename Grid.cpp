@@ -4,6 +4,9 @@
 class Grid {
 	public:
 		Grid(sf::RenderWindow& window, sf::Font* font) {
+			_font = font;
+			_game_started = false;
+
 			sf::Vector2f size(30.0f, 20.0f);
 			float width = window.getSize().x / size.x;
 
@@ -23,27 +26,6 @@ class Grid {
 				_rows_cols.push_back(row);
 			}
 
-			// set the number of mines in proximity for each square
-			for (int i = 0; i < (int)_rows_cols.size(); i++) {
-				for (int j = 0; j < (int)_rows_cols[i].size(); j++) {
-
-					// for this square, look in the surrounding 8 squares
-					unsigned int n_mines_in_proximity = 0;
-
-					for (int m = i - 1; m <= i + 1; m++) {
-						if (m < 0 || m >= (int)_rows_cols.size()) continue; // out of bounds
-						for (int n = j - 1; n <= j + 1; n++) {
-							if (n < 0 || n >= (int)_rows_cols[i].size()) continue; // out of bounds
-							if (!(m - i) && !(n - j)) continue; // this square
-							
-							if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[m][n]))
-								n_mines_in_proximity++;
-						}
-					}
-					_rows_cols[i][j]->SetNMinesInProximity(n_mines_in_proximity);
-				}
-			}
-
 			// stuff to display when the game ends
 			_game_over = false;
 			_game_over_text.setFont(*font);
@@ -57,8 +39,27 @@ play again? (Enter)\
 			_game_over_text.setStyle(sf::Text::Bold);
 		}
 
-		std::vector<std::vector<Square*>>& GetSquares() {
-			return _rows_cols;
+		void CalculateNMinesInProximity() {
+			// set the number of mines in proximity for each square
+			for (int i = 0; i < (int)_rows_cols.size(); i++) {
+				for (int j = 0; j < (int)_rows_cols[i].size(); j++) {
+
+					// for this square, look in the surrounding 8 squares
+					unsigned int n_mines_in_proximity = 0;
+
+					for (int m = i - 1; m <= i + 1; m++) {
+						if (m < 0 || m >= (int)_rows_cols.size()) continue; // out of bounds
+						for (int n = j - 1; n <= j + 1; n++) {
+							if (n < 0 || n >= (int)_rows_cols[i].size()) continue; // out of bounds
+							if (!(m - i) && !(n - j)) continue; // this square
+
+							if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[m][n]))
+								n_mines_in_proximity++;
+						}
+					}
+					_rows_cols[i][j]->SetNMinesInProximity(n_mines_in_proximity);
+				}
+			}
 		}
 
 		bool Update(sf::RenderWindow& window, sf::Event& event) {
@@ -71,37 +72,54 @@ play again? (Enter)\
 
 						std::pair<sf::Vector2f, sf::Vector2f> edges = _rows_cols[i][j]->GetEdges();
 
-						if (mouse.x > edges.first.x && mouse.x < edges.second.x &&
-							mouse.y > edges.first.y && mouse.y < edges.second.y) {
+						if (!(mouse.x > edges.first.x && mouse.x < edges.second.x &&
+							mouse.y > edges.first.y && mouse.y < edges.second.y)) continue;
 
-							// left click
-							if (event.mouseButton.button == sf::Mouse::Left) {
-								if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[i][j])) {
-									// reveal all squares
-									for (auto& row : _rows_cols) {
-										for (auto& square : row) {
-											square->Uncover();
-										}
+						// left click
+						if (event.mouseButton.button == sf::Mouse::Left) {
+							if (!_game_started) {
+								// this is the first clicked square so ensure
+								// it and none of the surrounding 8 are not mines
+								for (unsigned int m = i - 1; m <= i + 1; m++) {
+									if (m < 0 || m >= (unsigned int)_rows_cols.size()) continue; // out of bounds
+									for (unsigned int n = j - 1; n <= j + 1; n++) {
+										if (n < 0 || n >= (unsigned int)_rows_cols[i].size()) continue; // out of bounds
+										sf::Vector2f position = _rows_cols[m][n]->GetPosition();
+										std::pair<sf::Vector2f, sf::Vector2f> edges = _rows_cols[m][n]->GetEdges();
+										float size = edges.second.x - edges.first.x;
+										_rows_cols[m][n] = new Square(position, size, _font);
 									}
-									_game_over = true;
-
-									goto draw; // better than break in this case
 								}
-								else {
-									// if the square has zero mines in proximity,
-									// then loop over all adjacent squares also flipping them if they have zero and do so recursively
-									// stop when the square  has >0 mines in proximity
-									if (_rows_cols[i][j]->GetNMinesInProximity() == 0) {
-										Clear(i, j);
+								CalculateNMinesInProximity();
+
+								// dont need to do it again
+								_game_started = true;
+							}
+							if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[i][j])) {
+								// reveal all squares
+								for (auto& row : _rows_cols) {
+									for (auto& square : row) {
+										square->Uncover();
 									}
-										_rows_cols[i][j]->Uncover();
 								}
-							}
+								_game_over = true;
 
-							// right click
-							else if (event.mouseButton.button == sf::Mouse::Right) {
-								_rows_cols[i][j]->FlipFlag();
+								goto draw; // better than break in this case
 							}
+							else {
+								// if the square has zero mines in proximity,
+								// then loop over all adjacent squares also flipping them if they have zero and do so recursively
+								// stop when the square  has >0 mines in proximity
+								if (_rows_cols[i][j]->GetNMinesInProximity() == 0) {
+									Clear(i, j);
+								}
+									_rows_cols[i][j]->Uncover();
+							}
+						}
+
+						// right click
+						else if (event.mouseButton.button == sf::Mouse::Right) {
+							_rows_cols[i][j]->FlipFlag();
 						}
 					}
 				}
@@ -151,7 +169,14 @@ play again? (Enter)\
 			}
 		}
 
+		std::vector<std::vector<Square*>>& GetSquares() {
+			return _rows_cols;
+		}
+
 	private:
+		bool _game_started;
+
+		sf::Font* _font;
 		std::vector<std::vector<Square*>> _rows_cols;
 
 		std::random_device _rd; // a seed source for the random number engine

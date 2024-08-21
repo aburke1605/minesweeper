@@ -3,8 +3,6 @@
 
 /* TODO:
 * way to determine if all unmined squares have been uncovered
-* reveal all mines when win or lose
-* ensure first click is a square with no mines in proximity
 */
 
 
