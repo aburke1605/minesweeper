@@ -7,6 +7,7 @@ class Grid {
 			sf::Vector2f size(30.0f, 20.0f);
 			float width = window.getSize().x / size.x;
 
+			// to randomly position mines
 			_generator = std::mt19937(_rd()); // mersenne_twister_engine seeded with rd()
 			std::uniform_int_distribution<> distribution(0, 4);
 
@@ -22,7 +23,7 @@ class Grid {
 				_rows_cols.push_back(row);
 			}
 
-			// set number of mines in proximity for each square
+			// set the number of mines in proximity for each square
 			for (int i = 0; i < (int)_rows_cols.size(); i++) {
 				for (int j = 0; j < (int)_rows_cols[i].size(); j++) {
 
