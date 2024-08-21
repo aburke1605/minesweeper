@@ -1,11 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.cpp"
 
-/* TODO:
-* way to determine if all unmined squares have been uncovered
-*/
-
-
 int main() {
 
 	unsigned int x_dimension = 600;

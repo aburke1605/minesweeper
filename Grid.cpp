@@ -95,13 +95,10 @@ play again? (Enter)\
 								// dont need to do it again
 								_game_started = true;
 							}
+
 							if (Mine* mine = dynamic_cast<Mine*>(_rows_cols[i][j])) {
-								// reveal all squares
-								for (auto& row : _rows_cols) {
-									for (auto& square : row) {
-										square->Uncover();
-									}
-								}
+								// uncover all squares
+								RevealAll();
 								_game_over = true;
 
 								goto draw; // better than break in this case
@@ -113,7 +110,7 @@ play again? (Enter)\
 								if (_rows_cols[i][j]->GetNMinesInProximity() == 0) {
 									Clear(i, j);
 								}
-									_rows_cols[i][j]->Uncover();
+								_rows_cols[i][j]->Uncover();
 							}
 						}
 
@@ -122,6 +119,20 @@ play again? (Enter)\
 							_rows_cols[i][j]->FlipFlag();
 						}
 					}
+				}
+
+				// a counter to check if the player has won
+				unsigned int number_of_covered_squares = 0;
+				for (unsigned int i = 0; i < (unsigned int)_rows_cols.size(); i++) {
+					for (unsigned int j = 0; j < (unsigned int)_rows_cols[i].size(); j++) {
+						if (dynamic_cast<Mine*>(_rows_cols[i][j]) == nullptr &&_rows_cols[i][j]->GetCovered())
+							number_of_covered_squares++;
+					}
+				}
+				if (number_of_covered_squares == 0) {
+					// uncover all squares
+					RevealAll();
+					_game_over = true;
 				}
 			}
 
@@ -165,6 +176,14 @@ play again? (Enter)\
 							// simply uncover squares with >0 mines in proximity
 							_rows_cols[m][n]->Uncover();
 					}
+				}
+			}
+		}
+
+		void RevealAll() {
+			for (auto& row : _rows_cols) {
+				for (auto& square : row) {
+					square->Uncover();
 				}
 			}
 		}
