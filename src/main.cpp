@@ -8,7 +8,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(x_dimension, y_dimension), "window");
 
 	sf::Font* font = new sf::Font;
-	if (!font->loadFromFile("arial.ttf")) {
+	if (!font->loadFromFile("/arial.ttf")) {
 		return EXIT_FAILURE;
 	}
 

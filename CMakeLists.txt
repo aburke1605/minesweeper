@@ -224,6 +224,8 @@ elseif(EMSCRIPTEN)
         -sTOTAL_MEMORY=16mb
 
         --shell-file=${CMAKE_SOURCE_DIR}/shell.html
+
+        --preload-file ${CMAKE_SOURCE_DIR}/assets/arial.ttf@/arial.ttf
     )
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
     set(SFML_DIR "${SFML_LOC}/lib/cmake/SFML")
