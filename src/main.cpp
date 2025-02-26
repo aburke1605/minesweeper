@@ -1,14 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.cpp"
 
-int main() {
+#ifdef __EMSCRIPTEN__
+    const std::string fontPath = "/arial.ttf";
+#else
+    const std::string fontPath = "assets/arial.ttf";
+#endif
 
+int main() {
 	unsigned int x_dimension = 600;
 	unsigned int y_dimension = 400;
 	sf::RenderWindow window(sf::VideoMode(x_dimension, y_dimension), "window");
 
 	sf::Font* font = new sf::Font;
-	if (!font->loadFromFile("/arial.ttf")) {
+	if (!font->loadFromFile(fontPath)) {
 		return EXIT_FAILURE;
 	}
 
